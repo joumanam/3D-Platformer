@@ -7,7 +7,9 @@ public enum SoundType
     HOLDITEM,
     DROPITEM,
     FOOTSTEP,
-    JUMP
+    JUMP,
+    ENEMYHIT,
+    ENEMYDEAD
 }
 
 [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]

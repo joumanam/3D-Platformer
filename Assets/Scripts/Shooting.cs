@@ -10,11 +10,10 @@ public class Shooter : MonoBehaviour
     public float fireRate = 0.4f;
     private float nextFireTime = 0f;
 
-    public float range = 100f;
-    public BulletPool bulletPool;
+    public BulletPool bulletPool; // Reference to the BulletPool
+
     public bool isShooting;
     public bool enableShooting;
-
 
     private void Update()
     {
@@ -39,16 +38,15 @@ public class Shooter : MonoBehaviour
 
     void Shoot()
     {
-
         if (muzzleFlash != null)
             muzzleFlash.Play();
 
-        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // center of screen
+        Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
         Vector3 targetPoint;
         SoundManager.PlaySound(SoundType.SHOOT, 0.35f);
 
-        if (Physics.Raycast(ray, out hit, range))
+        if (Physics.Raycast(ray, out hit, 100f)) // Using 100f as range for simplicity
         {
             targetPoint = hit.point;
 
@@ -60,22 +58,19 @@ public class Shooter : MonoBehaviour
         }
         else
         {
-            targetPoint = ray.GetPoint(range); // Point far away in the same direction
+            targetPoint = ray.GetPoint(100f); // Again, using 100f as range for simplicity
         }
 
-        GameObject bulletObj = bulletPool.GetBullet();
-        if (bulletObj == null)
-            return;
-
-        bulletObj.transform.position = firePoint.position;
-
-        // Get direction from firePoint to targetPoint
         Vector3 direction = (targetPoint - firePoint.position).normalized;
 
-        Bullet bulletScript = bulletObj.GetComponent<Bullet>();
-        bulletScript.Fire(direction);
+        // Get a bullet from the pool and fire it
+        GameObject bulletObj = bulletPool.GetBullet();
+        if (bulletObj != null)
+        {
+            Bullet bulletScript = bulletObj.GetComponent<Bullet>();
+            bulletScript.Fire(direction, firePoint.position);
+        }
 
         Debug.DrawLine(firePoint.position, targetPoint, Color.red, 1f);
     }
-
 }

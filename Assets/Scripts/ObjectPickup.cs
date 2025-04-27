@@ -8,9 +8,17 @@ public class ObjectPickup : MonoBehaviour
     public float pickupAngleThreshold = 60f;
     public LayerMask pickupLayer;
     public LayerMask playerLayer;
-
     public GameObject heldObject;
+    public GameObject pickableItemEffectPrefab;
+
     private Rigidbody heldObjectRb;
+    private GameObject effect;
+    private GameObject currentlyHighlighted;
+
+    private void Update()
+    {
+        CheckForNearbyPickups();
+    }
 
     public void HoldOrDrop(InputAction.CallbackContext context)
     {
@@ -28,58 +36,62 @@ public class ObjectPickup : MonoBehaviour
         }
     }
 
-    public void TryPickup()
+    private Collider GetClosestPickupInView()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.transform.position, pickupRange, pickupLayer);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, pickupRange, pickupLayer);
 
-        Collider closestObject = null;
-        float closestDistance = Mathf.Infinity;
+        Collider closest = null;
+        float closestDist = Mathf.Infinity;
 
-        foreach (Collider collider in colliders)
+        foreach (Collider col in colliders)
         {
-            if (collider.transform.CompareTag("Pickup"))
+            if (col.CompareTag("Pickup"))
             {
-                Vector3 directionToObject = (collider.transform.position - transform.transform.position).normalized;
-                float angleToObject = Vector3.Angle(transform.transform.forward, directionToObject);
+                Vector3 dir = (col.transform.position - transform.position).normalized;
+                float angle = Vector3.Angle(transform.forward, dir);
 
-                // Ensure object is within forward view range
-                if (angleToObject <= pickupAngleThreshold)
+                if (angle <= pickupAngleThreshold)
                 {
-                    float distance = Vector3.Distance(transform.transform.position, collider.transform.position);
-                    if (distance < closestDistance)
+                    float dist = Vector3.Distance(transform.position, col.transform.position);
+                    if (dist < closestDist)
                     {
-                        closestDistance = distance;
-                        closestObject = collider;
+                        closest = col;
+                        closestDist = dist;
                     }
                 }
             }
         }
 
+        return closest;
+    }
+
+
+    public void TryPickup()
+    {
+        Collider closestObject = GetClosestPickupInView();
+
         if (closestObject != null)
         {
-            SoundManager.PlaySound(SoundType.HOLDITEM, 0.45f);
-            heldObject = closestObject.transform.gameObject;
+            heldObject = closestObject.gameObject;
             heldObjectRb = heldObject.GetComponent<Rigidbody>();
             heldObject.layer = LayerMask.NameToLayer("HeldObject");
+            SoundManager.PlaySound(SoundType.HOLDITEM, 0.45f);
             int playerLayerIndex = (int)Mathf.Log(playerLayer.value, 2);
             int heldObjectLayerIndex = heldObject.layer;
             Physics.IgnoreLayerCollision(heldObjectLayerIndex, playerLayerIndex, true);
 
-            // Reset velocity to prevent unintended motion
+            // Reset physics
             heldObjectRb.linearVelocity = Vector3.zero;
             heldObjectRb.angularVelocity = Vector3.zero;
-
-            // Disable physics while holding the object
             heldObjectRb.useGravity = false;
             heldObjectRb.constraints = RigidbodyConstraints.FreezeAll;
 
-            // Attach the object to the hold position
-            heldObject.transform.rotation = holdPosition.transform.rotation;
-            heldObject.transform.position = holdPosition.transform.position;
+            heldObject.transform.rotation = holdPosition.rotation;
+            heldObject.transform.position = holdPosition.position;
             heldObject.transform.SetParent(holdPosition);
-
         }
     }
+
 
     public void DropObject()
     {
@@ -95,6 +107,46 @@ public class ObjectPickup : MonoBehaviour
             heldObject.layer = (int)Mathf.Log(pickupLayer.value, 2);
             heldObjectRb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
             heldObject = null;
+        }
+    }
+
+    private void CheckForNearbyPickups()
+    {
+        Collider closestObject = GetClosestPickupInView();
+
+        if (closestObject != null)
+        {
+            if (currentlyHighlighted != closestObject.gameObject)
+            {
+                ClearHighlightedPickup();
+
+                Transform existing = closestObject.transform.Find("PickupEffect");
+                if (existing == null)
+                {
+                    GameObject effect = Instantiate(pickableItemEffectPrefab, closestObject.transform.position, Quaternion.identity, closestObject.transform);
+                    effect.name = "PickupEffect";
+                }
+                currentlyHighlighted = closestObject.gameObject;
+            }
+        }
+        else
+        {
+            ClearHighlightedPickup();
+        }
+    }
+
+
+    private void ClearHighlightedPickup()
+    {
+        if (currentlyHighlighted != null)
+        {
+            Transform effect = currentlyHighlighted.transform.Find("PickupEffect");
+            if (effect != null)
+            {
+                Destroy(effect.gameObject);
+            }
+
+            currentlyHighlighted = null;
         }
     }
 }

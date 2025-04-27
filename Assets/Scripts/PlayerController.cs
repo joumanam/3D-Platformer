@@ -161,8 +161,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isWalking && isGrounded)
         {
-            bobTimer += Time.deltaTime * bobFrequency;
-            float bobOffset = Mathf.Sin(bobTimer) * bobAmplitude;
+            float speedFactor = (moveSpeed) / (walkSpeed + 1f);
+
+            float dynamicFrequency = bobFrequency * speedFactor;
+            float dynamicAmplitude = bobAmplitude * speedFactor;
+
+            bobTimer += Time.deltaTime * dynamicFrequency;
+            float bobOffset = Mathf.Sin(bobTimer) * dynamicAmplitude;
 
             Vector3 newPos = originalCameraLocalPos;
             newPos.y += bobOffset;
