@@ -37,9 +37,11 @@ public class BulletPool : MonoBehaviour
     }
 
     // Get bullet data (damage, speed) to pass to the Bullet script when firing
-    public void GetBulletData(out float damage, out float speed)
+    public void GetBulletData(out float damage, out float speed, out ParticleSystem effect, out float fireRate)
     {
         damage = bulletData.damage;
         speed = bulletData.speed;
+        effect = bulletData.bulletEffect;
+        fireRate = bulletData.fireRate;
     }
 }

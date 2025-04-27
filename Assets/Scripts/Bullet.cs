@@ -4,6 +4,7 @@ public class Bullet : MonoBehaviour
 {
     private Rigidbody rb;
     private float currentBulletDamage, currentBulletSpeed;
+    private ParticleSystem currentBulletEffect;
 
     // Reference to BulletPool to get the necessary data (bullet damage, speed)
     private BulletPool bulletPool;
@@ -19,7 +20,7 @@ public class Bullet : MonoBehaviour
     public void Fire(Vector3 direction, Vector3 position)
     {
         // Retrieve the bullet data from BulletPool when fired
-        bulletPool.GetBulletData(out currentBulletDamage, out currentBulletSpeed);
+        bulletPool.GetBulletData(out currentBulletDamage, out currentBulletSpeed, out currentBulletEffect, out _);
 
         // Set the bullet's position and velocity
         transform.position = position;
@@ -50,6 +51,18 @@ public class Bullet : MonoBehaviour
             {
                 enemy.TakeDamage(currentBulletDamage); // Deal damage to the enemy
             }
+            // Instantiate the hit particle effect when the bullet hits an object
+            if (currentBulletEffect != null)
+            {
+                // Get the collision point from the collision normal
+                Vector3 hitPoint = other.ClosestPointOnBounds(transform.position);
+
+                // Instantiate the particle effect at the point of impact
+                ParticleSystem effect = Instantiate(currentBulletEffect, hitPoint, Quaternion.identity);
+                effect.Play();
+                Destroy(effect.gameObject, 2f);
+            }
         }
+
     }
 }

@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 90893250}
   - component: {fileID: 90893249}
   - component: {fileID: 90893248}
+  - component: {fileID: 90893253}
   m_Layer: 6
   m_Name: Cube (2)
   m_TagString: Pickup
@@ -260,6 +261,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -91.159, z: 0}
+--- !u!114 &90893253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90893247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea7422f0e6a1104f863ee34d6756f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  deathEffect: {fileID: 4593184484909914550, guid: 2e1e9506f5904a64b81744324fb7cd50, type: 3}
 --- !u!4 &227847582 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3616505055730314688, guid: 11c3bab489cd1a444b83d3d84ad9a7c9, type: 3}
@@ -917,7 +932,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2580e5aa7308b3c428ca4b5a40d04d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 39408730990310282, guid: 482bd8a93fd8e3846aadf3a46a24c54a, type: 3}
+  bulletData: {fileID: 11400000, guid: 548b9ae4ecc52ae4290ce5bad537bf11, type: 2}
   poolSize: 50
 --- !u!4 &503967987
 Transform:
@@ -1273,6 +1288,7 @@ GameObject:
   - component: {fileID: 756064041}
   - component: {fileID: 756064040}
   - component: {fileID: 756064039}
+  - component: {fileID: 756064044}
   m_Layer: 6
   m_Name: Cube (1)
   m_TagString: Pickup
@@ -1396,6 +1412,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &756064044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756064038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea7422f0e6a1104f863ee34d6756f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  deathEffect: {fileID: 4593184484909914550, guid: 2e1e9506f5904a64b81744324fb7cd50, type: 3}
 --- !u!4 &822988930 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8254202490671687643, guid: fd9efd1339d6937448e34e62640f6621, type: 3}
@@ -1776,6 +1806,7 @@ GameObject:
   - component: {fileID: 938099181}
   - component: {fileID: 938099180}
   - component: {fileID: 938099184}
+  - component: {fileID: 938099185}
   m_Layer: 6
   m_Name: Cube
   m_TagString: Pickup
@@ -1899,6 +1930,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &938099185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 938099179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea7422f0e6a1104f863ee34d6756f11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  deathEffect: {fileID: 4593184484909914550, guid: 2e1e9506f5904a64b81744324fb7cd50, type: 3}
 --- !u!1 &993162062
 GameObject:
   m_ObjectHideFlags: 0
@@ -2991,6 +3036,14 @@ MonoBehaviour:
     - {fileID: 8300000, guid: c7b05875e69d5304284e6168fd23b3dd, type: 3}
   - name: JUMP
     sounds: []
+  - name: ENEMYHIT
+    sounds:
+    - {fileID: 8300000, guid: d79a228a7de791d4e9350d55d637045b, type: 3}
+    - {fileID: 8300000, guid: b07d19c8670870043914767c214e03a1, type: 3}
+    - {fileID: 8300000, guid: 95b149d6488e44d428aaa7d772bf8650, type: 3}
+    - {fileID: 8300000, guid: ce41cd89e2d319342aff6690f3200307, type: 3}
+  - name: ENEMYDEAD
+    sounds: []
 --- !u!82 &2125160176
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3516,10 +3569,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 993162063}
   cam: {fileID: 330585545}
-  muzzleFlash: {fileID: 4021103657954561960, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
-  hitEffectPrefab: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
-  fireRate: 0.4
-  range: 25
   bulletPool: {fileID: 503967986}
   isShooting: 0
   enableShooting: 0

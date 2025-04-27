@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] public float health = 100f;
+    public float health = 100f;
+    public ParticleSystem deathEffect;
+    private Rigidbody rb;
 
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -17,6 +23,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        Instantiate(deathEffect, rb.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }
