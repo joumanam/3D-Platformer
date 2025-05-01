@@ -61,10 +61,8 @@ public class ObjectPickup : MonoBehaviour
                 }
             }
         }
-
         return closest;
     }
-
 
     public void TryPickup()
     {

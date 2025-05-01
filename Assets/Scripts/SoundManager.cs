@@ -9,7 +9,8 @@ public enum SoundType
     FOOTSTEP,
     JUMP,
     ENEMYHIT,
-    ENEMYDEAD
+    ENEMYDEAD,
+    COLLECTCOIN
 }
 
 [RequireComponent(typeof(AudioSource)), ExecuteInEditMode]
