@@ -1,5 +1,7 @@
 using TMPro;
 using UnityEngine;
+
+// Basically used for the UI Score
 public class CoinManager : MonoBehaviour
 {
     public static CoinManager Instance;
@@ -28,7 +30,6 @@ public class CoinManager : MonoBehaviour
     public void AddCoin(int amount)
     {
         coinCount += amount;
-        // I want to do the fly to UI logic here
         UpdateCoinUI();
     }
 
@@ -37,5 +38,4 @@ public class CoinManager : MonoBehaviour
         if (coinText != null)
             coinText.text = "Coins: " + coinCount;
     }
-
 }

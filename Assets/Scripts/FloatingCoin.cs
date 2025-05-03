@@ -7,9 +7,9 @@ public class FloatingCoin : MonoBehaviour
     public float floatFrequency = 1f; // how fast it floats
     public int value = 1;
     public int coinSoundIndex = 0;
-    public GameObject flyCoinUIPrefab;
-    public RectTransform uiTarget;
-    public Canvas uiCanvas;
+    //public GameObject flyCoinUIPrefab;
+    //public RectTransform uiTarget;
+    //public Canvas uiCanvas;
 
 
     private Vector3 startPosition;
@@ -33,13 +33,14 @@ public class FloatingCoin : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GameObject uiCoin = Instantiate(flyCoinUIPrefab, uiCanvas.transform);
-            var flyScript = uiCoin.GetComponent<CoinFlyEffect>();
-            flyScript.targetUI = uiTarget;
-            flyScript.StartFly(transform.position, uiCanvas);
+            //GameObject uiCoin = Instantiate(flyCoinUIPrefab, uiCanvas.transform);
+            //var flyScript = uiCoin.GetComponent<CoinFlyEffect>();
+            //flyScript.targetUI = uiTarget;
+            //flyScript.StartFly(transform.position, uiCanvas);
             SoundManager.PlaySound(SoundType.COLLECTCOIN, 0.45f, false, coinSoundIndex);
-            //CoinManager.Instance.AddCoin(value);
-            Destroy(gameObject);
+            CoinManager.Instance.AddCoin(value);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 }

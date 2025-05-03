@@ -22,6 +22,8 @@ public class CoinFlyEffect : MonoBehaviour
         isMoving = true;
     }
 
+
+
     void Update()
     {
         if (!isMoving || targetUI == null || rectTransform == null)
